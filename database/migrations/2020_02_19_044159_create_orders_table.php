@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->double('total');
             $table->double('tax');
             $table->double('delivery')->default(0);
-            $table->double('status')->default('pending');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
