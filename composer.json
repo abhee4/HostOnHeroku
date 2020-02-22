@@ -62,8 +62,8 @@
             "@php artisan clear-compiled",
             "@php artisan passport:install --force",
             "chmod -R 777 storage",
-            "echo -n $OAUTH_PRIVATE_KEY > file://storage/oauth-private.key",
-            "echo -n $OAUTH_PUBLIC_KEY > file://storage/oauth-public.key"
+            "echo -n $OAUTH_PRIVATE_KEY > /storage/oauth-private.key",
+            "echo -n $OAUTH_PUBLIC_KEY > /storage/oauth-public.key"
         ]
     }
 }
