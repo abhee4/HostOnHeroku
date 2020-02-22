@@ -34,5 +34,21 @@ class AuthController extends Controller
     }
     public function login(ApiLoginRequest $request)
     {
+        $credentials = $request->only(['email', 'password']);
+        $user = auth()->attempt($credentials);
+
+        if (!$user) {
+            return response([
+                'error' => 'forbidden',
+                'message' => 'Check your Username or Password'
+            ], 403);
+        }
+        $token = $user->createToken('api_token')->accessToken;
+        return response(
+            [
+                'user_id' => $user->id,
+                'access_token' => $token,
+            ]
+        );
     }
 }
