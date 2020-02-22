@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiLoginRequest;
 use App\Http\Requests\ApiRegisterRequest;
 use Illuminate\Support\Facades\Hash;
-use app\User;
+use App\User;
 
 class AuthController extends Controller
 {
