@@ -12,7 +12,6 @@ class AuthController extends Controller
 {
     public function register(ApiRegisterRequest $request)
     {
-        return $request;
         /**
          * * @var $user User
          */
