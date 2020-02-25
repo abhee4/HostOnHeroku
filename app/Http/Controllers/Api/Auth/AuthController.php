@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiLoginRequest;
 use App\Http\Requests\ApiRegisterRequest;
 use Illuminate\Support\Facades\Hash;
+use GuzzleHttp\Client;
 use App\User;
 
 class AuthController extends Controller
@@ -24,31 +25,62 @@ class AuthController extends Controller
                 'type' => $request->type,
             ]
         );
-        $token = $user->createToken('api_token')->accessToken;
-        return response(
-            [
-                'user_id' => $user->id,
-                'access_token' => $token,
-            ]
-        );
+
+        $http = new Client();
+
+        $response = $http->post( url('/').'/oauth/token', [
+            'form_params' => [
+                'grant_type' => 'password',
+                'client_id' => '302',
+                'client_secret' => 'FlR0NunsVDJikmXLJU8jxlsUqivdPuiOveALUOMc',
+                'username' => $user->email,
+                'password' => $user->password,
+                'scope' => '',
+            ],
+        ]);
+
+        return json_decode((string) $response->getBody(), true);
+        // $token = $user->createToken('api_token')->accessToken;
+        // return response(
+        //     [
+        //         'user_id' => $user->id,
+        //         'access_token' => $token,
+        //     ]
+        // );
     }
     public function login(ApiLoginRequest $request)
     {
         $credentials = $request->only(['email', 'password']);
-        $authaAttempt = auth()->attempt($credentials);
+        $authAttempt = auth()->attempt($credentials);
 
-        if (!$authaAttempt) {
+        if (!$authAttempt) {
             return response([
                 'error' => 'forbidden',
                 'message' => 'Check your Username or Password'
             ], 403);
         }
-        $token = auth()->user()->createToken('api_token')->accessToken;
-        return response(
-            [
-                'user_id' => auth()->id(),
-                'access_token' => $token,
-            ]
-        );
+
+        $http = new Client();
+
+        $response = $http->post( url('/').'/oauth/token', [
+            'form_params' => [
+                'grant_type' => 'password',
+                'client_id' => '302',
+                'client_secret' => 'FlR0NunsVDJikmXLJU8jxlsUqivdPuiOveALUOMc',
+                'username' => auth()->user->email,
+                'password' => auth()->user->password,
+                'scope' => '',
+            ],
+        ]);
+
+        return json_decode((string) $response->getBody(), true);
+
+        // $token = auth()->user()->createToken('api_token')->accessToken;
+        // return response(
+        //     [
+        //         'user_id' => auth()->id(),
+        //         'access_token' => $token,
+        //     ]
+        // );
     }
 }
