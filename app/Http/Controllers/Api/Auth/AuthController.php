@@ -50,7 +50,6 @@ class AuthController extends Controller
     }
     public function login(ApiLoginRequest $request)
     {
-        return $request;
         $credentials = $request->only(['email', 'password']);
         $authAttempt = auth()->attempt($credentials);
 
