@@ -60,7 +60,6 @@ class AuthController extends Controller
                 'message' => 'Check your Username or Password'
             ], 403);
         }
-
         $http = new Client();
 
         $response = $http->post( url('/').'/oauth/token', [
